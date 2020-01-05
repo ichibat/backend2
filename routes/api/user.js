@@ -40,7 +40,6 @@ router.post('/', async (req,res)=>{
         if(err) throw err;
         user.password = hash;
     });
-
     const savedUser = await user.save();
     res.json(savedUser);
 
