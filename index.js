@@ -10,6 +10,10 @@ const session = require("express-session");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+
+// load router in line of other requires
+const userRouter = require('./routes/api/user');
+
 //mongoDB options
 const options = { useNewUrlParser: true, useUnifiedTopology: true }
 //port setting
@@ -26,7 +30,11 @@ const app = express();
 mongoose.connect('mongodb://tims:Hit135Run@ds019946.mlab.com:19946/ktmethod', options);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'database connection error:'));
-db.once('open', () => console.log('DB connection successful'));
+db.once('open', () => console.log('database connection successful'));
+
+
+//importing models
+const User = require('./models/User'); 
 
 
 //Use following middlewares
@@ -49,6 +57,8 @@ app.use(flash());
 app.use(cors());
 
 
+// use router under middlewares
+app.use('/user', userRouter);
 
 //Hello World!
 app.get('/', (req, res) => {
