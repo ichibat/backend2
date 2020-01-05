@@ -1,8 +1,13 @@
 
 // ./routes/user.js
 const express = require('express');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const User = require('../../models/User');
+
+
+//bcrypt setting
+const saltRounds = 10;
 
 // in order to receive data from client
 router.use(express.json());
@@ -25,10 +30,15 @@ router.get('/:userID',(req, res)=>{
 
 // POST request in ./routes/user.js under router.get
 router.post('/', async (req,res)=>{
+    
     const user = new User({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password
+    });
+    bcrypt.hash(user.password, saltRounds, (err, hash) =>{
+        if(err) throw err;
+        user.password = hash;
     });
 
     const savedUser = await user.save();
