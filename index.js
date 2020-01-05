@@ -58,10 +58,3 @@ app.get('/', (req, res) => {
 
 // port listening
 app.listen(port, () => console.log(`OK, Server started on port ${port}`));
-
-
-
-
-
-
-
