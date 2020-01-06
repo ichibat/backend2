@@ -62,7 +62,6 @@ router.patch('/:userID', async (req,res) => {
 
   //login authentication with email and password
   router.post('/login',(req,res) => {
-      console.log(req.body.email);
     User.findOne({ email : req.body.email }, (err, user) => {
       if (err) {
         return res.status(400).json({"error":err.message});
@@ -70,7 +69,6 @@ router.patch('/:userID', async (req,res) => {
       if(!user){
         return res.json({"message": "email not found"})
       }
-      console.log(user.email);
       bcrypt.compare(req.body.password, user.password, (err,result) => {
         if (err) {
           return res.status(400).json({"error":err.message});
