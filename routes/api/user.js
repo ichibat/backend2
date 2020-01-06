@@ -38,6 +38,7 @@ router.post('/', (req,res)=>{
         password: req.body.password
     });
     bcrypt.hash(user.password, saltRounds, (err, hash) =>{
+        if(err) throw err;
         user.password = hash;
         user.save();
         res.json(user);
