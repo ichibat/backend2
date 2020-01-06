@@ -10,7 +10,8 @@ const User = require('../../models/User');
 const saltRounds = 10;
 
 // in order to receive data from client
-router.use(express.json());
+router.use(express.json())
+router.use(express.urlencoded({ extended: true }));
 
 //GET request for finding all users
 router.get('/', async (req, res) => {
@@ -29,20 +30,18 @@ router.get('/:userID',(req, res)=>{
 });
 
 // POST request in ./routes/user.js under router.get
-router.post('/', async (req,res)=>{
-    
+// This router might have problem in asynchronization
+router.post('/', (req,res)=>{
     const user = new User({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password
     });
     bcrypt.hash(user.password, saltRounds, (err, hash) =>{
-        if(err) throw err;
         user.password = hash;
+        user.save();
+        res.json(user);
     });
-    const savedUser = await user.save();
-    res.json(savedUser);
-
 });
 
 
@@ -60,5 +59,29 @@ router.patch('/:userID', async (req,res) => {
     res.send(user);
   });
 
+
+  //login authentication with email and password
+  router.post('/login',(req,res) => {
+      console.log(req.body.email);
+    User.findOne({ email : req.body.email }, (err, user) => {
+      if (err) {
+        return res.status(400).json({"error":err.message});
+      }
+      if(!user){
+        return res.json({"message": "email not found"})
+      }
+      console.log(user.email);
+      bcrypt.compare(req.body.password, user.password, (err,result) => {
+        if (err) {
+          return res.status(400).json({"error":err.message});
+        }
+        if (!result) {
+          return res.json({"message" : "password is not correct"})
+        }
+        return res.json({"message" : "password is correct"})
+      })
+    })
+  })
+  
 
 module.exports = router;

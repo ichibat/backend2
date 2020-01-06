@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const flash = require("connect-flash");
 const passport = require("passport");
 const session = require("express-session");
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
