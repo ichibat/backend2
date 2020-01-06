@@ -9,6 +9,10 @@ const User = require('../../models/User');
 //bcrypt setting
 const saltRounds = 10;
 
+
+// JWT setting
+const jwt = require('jsonwebtoken');
+
 // in order to receive data from client
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }));
@@ -77,10 +81,38 @@ router.patch('/:userID', async (req,res) => {
         if (!result) {
           return res.json({"message" : "password is not correct"})
         }
-        return res.json({"message" : "password is correct"})
+
+// remove return res.json({"message" : "password is correct"}) and paste following
+
+const payload = {
+    id: user.id,
+    name: user.name,
+    email: user.email
+    }
+    
+    const token = jwt.sign(payload,'secret')
+    return res.json({token})
+        
       })
     })
   })
   
+  router.get('/auth',(req,res) => {
+
+    const bearToken = req.headers['authorization']
+    const bearer = bearToken.split(' ')
+    const token = bearer[1]
+  
+    jwt.verify(token,'secret',(err,user)=>{
+      if(err){
+        return res.sendStatus(403)
+      }else{
+        return res.json({
+              user
+            });
+      }
+    })
+  });
+
 
 module.exports = router;

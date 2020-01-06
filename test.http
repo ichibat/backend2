@@ -1,0 +1,2 @@
+GET http://127.0.0.1:5000/user/auth
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6ImtldmluIiwiZW1haWwiOiJrZXZpbkB0ZXN0LmNvbSIsImlhdCI6MTU3NzE1NDA4Nn0.uSSn6Q8IGK1xL2EcsxX3dX_3XZIuuh8lZ4UxzShZg34
