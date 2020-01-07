@@ -64,6 +64,7 @@ router.patch('/:userID', async (req,res) => {
     res.send(user);
   });
 
+  
 
   //login authentication with email and password
   router.post('/login',(req,res) => {
